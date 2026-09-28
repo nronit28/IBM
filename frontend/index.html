@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM // FIN_OS (R) — Autonomous Financial Runtime</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23D71920'/></svg>">
+</head>
+<body>
+
+  <!-- FLOATING TOP NAVIGATION (NOTHING PILL DESIGN) -->
+  <header class="top-bar-wrapper">
+    <nav class="top-nav">
+      <a href="#hero" class="brand-badge">
+        <span class="glyph-led"></span>
+        <span>IBM // FIN_OS (R)</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#overview" class="nav-link nav-link-optional">Overview</a></li>
+        <li><a href="#problem-matrix" class="nav-link">Problems</a></li>
+        <li><a href="#architecture" class="nav-link">Agent Swarm</a></li>
+        <li><a href="#live-console" class="nav-link">Live Terminal</a></li>
+        <li><a href="#telemetry" class="nav-link nav-link-optional">Telemetry</a></li>
+      </ul>
+
+      <a href="#live-console" class="nav-cta">
+        <span>RUN SIMULATION</span>
+        <span>&rarr;</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- REAL-TIME LEDGER TICKER TAPE -->
+  <div class="ticker-container" id="overview">
+    <div class="ticker-track">
+      <div class="ticker-item">> 3-WAY MATCHING EFFICIENCY: <span>99.4%</span></div>
+      <div class="ticker-item">> DAYS SALES OUTSTANDING (DSO): <span>-14 DAYS</span></div>
+      <div class="ticker-item">> CLERK EXCEPTION TOUCH-TIME: <span>-84%</span></div>
+      <div class="ticker-item">> SAP S/4HANA BAPI CLEARANCE LATENCY: <span>0.38S</span></div>
+      <div class="ticker-item">> UNALLOCATED CASH LEAKAGE: <span>$0.00</span></div>
+      <div class="ticker-item">> RAG CONTRACT COVERAGE: <span>1,420 CLAUSES</span></div>
+      <!-- Duplicate for infinite marquee loop -->
+      <div class="ticker-item">> 3-WAY MATCHING EFFICIENCY: <span>99.4%</span></div>
+      <div class="ticker-item">> DAYS SALES OUTSTANDING (DSO): <span>-14 DAYS</span></div>
+      <div class="ticker-item">> CLERK EXCEPTION TOUCH-TIME: <span>-84%</span></div>
+      <div class="ticker-item">> SAP S/4HANA BAPI CLEARANCE LATENCY: <span>0.38S</span></div>
+      <div class="ticker-item">> UNALLOCATED CASH LEAKAGE: <span>$0.00</span></div>
+    </div>
+  </div>
+
+  <main class="site-container">
+
+    <!-- ==========================================================================
+         SECTION 1: HERO & VINTAGE IBM COMPUTER ASSET
+         ========================================================================== -->
+    <section class="hero-section" id="hero">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <span class="glyph-led" style="background:#0F62FE; box-shadow:0 0 10px #0F62FE;"></span>
+            <span>COGNITIVE ENTERPRISE RUNTIME</span>
+          </div>
+
+          <h1 class="hero-headline">
+            AUTONOMOUS RUNTIME FOR
+            <span class="dot-header">ENTERPRISE PAYMENTS</span>
+          </h1>
+
+          <p class="hero-subtext">
+            Traditional ERP rules fail when invoices describe services using informal terminology, rate amendments, or unapproved milestones. 
+            We combine <strong>RAG Contract Intelligence</strong> with a <strong>Multi-Agent Swarm</strong> to autonomously resolve payment exceptions, match line items, and schedule disbursements.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#live-console" class="btn-primary">
+              <span>EXPLORE INTERACTIVE TERMINAL</span>
+              <span>&darr;</span>
+            </a>
+            <a href="#problem-matrix" class="btn-secondary">
+              <span>5 PAYMENT BOTTLENECKS</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- HERO ASSET: VINTAGE IBM 5150 PC WITH DUAL ASCII / PHOTO MODE -->
+        <div class="hero-asset-card">
+          <div class="card-header-bar">
+            <div class="model-spec">
+              <span>IBM PERSONAL COMPUTER (R) // MODEL 5150</span>
+            </div>
+            <div class="mode-toggle">
+              <button id="btnPhotoView" class="toggle-btn active">PHOTO</button>
+              <button id="btnAsciiView" class="toggle-btn">ASCII</button>
+            </div>
+          </div>
+
+          <div class="computer-display-frame">
+            <!-- Studio Photo Mode with Green Phosphor Live Screen Overlay -->
+            <div id="computerPhotoWrapper" class="computer-photo-wrapper">
+              <img src="assets/ibm_vintage_pc.jpg" alt="Vintage IBM 5150 Computer" class="computer-img" />
+              <div class="crt-live-overlay">
+                <pre id="crtScreenLiveText">A> SAP_AP.EXE
+>> CONNECTED
+>> PO: 45009812
+>> RAG: ONLINE
+_</pre>
+              </div>
+            </div>
+
+            <!-- ASCII Art Viewport -->
+            <pre id="computerAsciiWrapper" class="crt-ascii-wrapper"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 2: THE 5 ENTERPRISE PAYMENT PROBLEMS (BENTO GRID)
+         ========================================================================== -->
+    <section id="problem-matrix">
+      <div class="section-label">
+        <span>[ 02 // PROBLEM MATRIX ]</span>
+      </div>
+      <h2 class="section-title">
+        FIVE BOTTLENECKS IN <span class="ndot-accent">GLOBAL FINANCE</span>
+      </h2>
+      <p class="section-description">
+        Enterprise finance handles trillions of dollars across millions of complex contracts. 
+        Here is how traditional RPA fails, and how RAG & Agentic AI completely resolve each friction point.
+      </p>
+
+      <div class="bento-grid">
+        <!-- Bento 1: AP Invoice Exceptions (Col 7) -->
+        <div class="bento-card col-7">
+          <div class="card-top">
+            <span class="card-index">[ 01 ]</span>
+            <span class="card-badge">Accounts Payable</span>
+          </div>
+          <h3 class="card-title">Autonomous Invoice Exception Handling & 3-Way Matching</h3>
+          <p class="card-body-text">
+            <strong>The Bottleneck:</strong> Service invoices (milestone billing, consulting hours) use non-standard terminology that mismatches SOW rate cards and triggers costly manual review queues in ERPs.<br><br>
+            <strong>The AI Solution:</strong> RAG indexes SOW rate schedules and semantic aliases. The Contract Validator Agent confirms rates and milestones, while the ERP Agent verifies PO balances and Goods Receipts in SAP S/4HANA.
+          </p>
+          <div class="solution-pill-tag">RAG Clause Grounding + Auto-Dispute Drafting</div>
+        </div>
+
+        <!-- Bento 2: AR Remittance & Cash App (Col 5) -->
+        <div class="bento-card col-5">
+          <div class="card-top">
+            <span class="card-index">[ 02 ]</span>
+            <span class="card-badge">Accounts Receivable</span>
+          </div>
+          <h3 class="card-title">Intelligent Remittance Processing & Unallocated Cash</h3>
+          <p class="card-body-text">
+            <strong>The Bottleneck:</strong> Clients send bulk lump sums with messy remittance PDF notes and arbitrary withholding deductions, leaving millions unallocated.<br><br>
+            <strong>The AI Solution:</strong> Remittance Agent parses messy PDFs and executes combinatorial invoice matching against open ledger items.
+          </p>
+          <div class="solution-pill-tag">Combinatorial Clearing Engine</div>
+        </div>
+
+        <!-- Bento 3: Cross-Border Sanctions & ISO 20022 (Col 4) -->
+        <div class="bento-card col-4">
+          <div class="card-top">
+            <span class="card-index">[ 03 ]</span>
+            <span class="card-badge">Treasury Compliance</span>
+          </div>
+          <h3 class="card-title">Multi-Jurisdiction Sanctions & ISO 20022 Compliance</h3>
+          <p class="card-body-text">
+            <strong>The Bottleneck:</strong> False-positive AML/OFAC flags delay international wire settlements across 170+ countries.<br><br>
+            <strong>The AI Solution:</strong> Screening Investigator Agent indexes global sanctions registries and cross-references beneficial ownership (UBO) records to clear false positives in seconds.
+          </p>
+          <div class="solution-pill-tag">Autonomous Sanctions Triage</div>
+        </div>
+
+        <!-- Bento 4: Cloud & Consulting Dispute Resolution (Col 4) -->
+        <div class="bento-card col-4">
+          <div class="card-top">
+            <span class="card-index">[ 04 ]</span>
+            <span class="card-badge">Cloud & Consulting</span>
+          </div>
+          <h3 class="card-title">Contract-to-Billing Dispute Resolution</h3>
+          <p class="card-body-text">
+            <strong>The Bottleneck:</strong> Disputed cloud usage overages and SLA downtime credits hold up multimillion-dollar vendor invoices.<br><br>
+            <strong>The AI Solution:</strong> Claims Analyzer Agent queries live infrastructure telemetry logs and calculates contractual credits pursuant to signed SLA appendices.
+          </p>
+          <div class="solution-pill-tag">Telemetry-Verified SLA Credits</div>
+        </div>
+
+        <!-- Bento 5: Dynamic Working Capital Optimization (Col 4) -->
+        <div class="bento-card col-4">
+          <div class="card-top">
+            <span class="card-index">[ 05 ]</span>
+            <span class="card-badge">Liquidity Ops</span>
+          </div>
+          <h3 class="card-title">Working Capital & Dynamic Payment Scheduling</h3>
+          <p class="card-body-text">
+            <strong>The Bottleneck:</strong> Rigid ERP payment runs fail to capture 2/10 Net 30 early payment discounts or minimize foreign exchange (FX) conversion costs.<br><br>
+            <strong>The AI Solution:</strong> Liquidity Forecast Agent predicts incoming collections and optimizes payment execution across FedNow, RTP, and SWIFT rails.
+          </p>
+          <div class="solution-pill-tag">Dynamic Discount Optimization</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 3: MULTI-AGENT ARCHITECTURE (THE SWARM)
+         ========================================================================== -->
+    <section id="architecture">
+      <div class="section-label">
+        <span>[ 03 // COGNITIVE ENGINE ]</span>
+      </div>
+      <h2 class="section-title">
+        THE MULTI-AGENT <span class="ndot-accent">AP SWARM</span>
+      </h2>
+      <p class="section-description">
+        Rather than relying on brittle rule engines, four autonomous subagents collaborate under an AP Supervisor to inspect, cross-verify, and resolve every invoice line item.
+      </p>
+
+      <div class="swarm-diagram-container">
+        <div class="agents-grid">
+          <div class="agent-node">
+            <div class="agent-icon-badge">[ AGENT 01 ]</div>
+            <div class="agent-name">Normalizer Agent</div>
+            <div class="agent-desc">
+              Ingests raw PDF/EDI/JSON invoices. Standardizes role descriptions, parses milestone tags, and detects discrepancies between billed rates and line totals.
+            </div>
+            <div class="agent-tools">TOOLS: Regex Parser, Currency Normalizer</div>
+          </div>
+
+          <div class="agent-node">
+            <div class="agent-icon-badge">[ AGENT 02 ]</div>
+            <div class="agent-name">Contract Validator</div>
+            <div class="agent-desc">
+              Executes hybrid RAG vector search over MSAs, SOW rate cards, and clauses. Semantically aligns informal roles to contracted ceilings with confidence scoring.
+            </div>
+            <div class="agent-tools">TOOLS: BM25 Retriever, Semantic Role Aligner</div>
+          </div>
+
+          <div class="agent-node">
+            <div class="agent-icon-badge">[ AGENT 03 ]</div>
+            <div class="agent-name">ERP Action Agent</div>
+            <div class="agent-desc">
+              Queries SAP S/4HANA Procurement APIs. Validates PO committed balance, checks line allocations, and verifies approved Goods/Services Receipts (SES).
+            </div>
+            <div class="agent-tools">TOOLS: SAP BAPI Mock, PO Ledger Balance</div>
+          </div>
+
+          <div class="agent-node">
+            <div class="agent-icon-badge">[ AGENT 04 ]</div>
+            <div class="agent-name">Resolution Agent</div>
+            <div class="agent-desc">
+              Evaluates policy tolerances (&le; $25 tax variance). If variance exists, autonomously drafts vendor dispute notices citing contract clauses, or notifies PMs for missing receipts.
+            </div>
+            <div class="agent-tools">TOOLS: Policy Gate, Dispute Synthesizer</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 4: INTERACTIVE LIVE SIMULATION CONSOLE (CRT TERMINAL)
+         ========================================================================== -->
+    <section id="live-console">
+      <div class="section-label">
+        <span>[ 04 // LIVE WORKBENCH ]</span>
+      </div>
+      <h2 class="section-title">
+        AP SIMULATION <span class="ndot-accent">TERMINAL</span>
+      </h2>
+      <p class="section-description">
+        Select any real-world IBM invoice scenario below. Watch the autonomous agent swarm execute the 3-way match, query RAG contracts, and generate audit-ready output in real time.
+      </p>
+
+      <div class="terminal-card">
+        <!-- Terminal Titlebar -->
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="t-dot red"></span>
+            <span class="t-dot yellow" id="terminalStatusDot"></span>
+            <span class="t-dot green"></span>
+          </div>
+          <div class="terminal-title">IBM // AP_RUNTIME_V1.10 (SAP S/4HANA CONNECTED)</div>
+          <div style="font-family: var(--font-mono); font-size: 0.68rem; color: #64748B;">ACTIVE SESSION</div>
+        </div>
+
+        <!-- Scenario Pills Selector Bar -->
+        <div class="scenario-pills-bar" id="scenarioPills">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Terminal Output Body -->
+        <div class="terminal-body">
+          <div class="terminal-content-grid">
+            <!-- Left: Streaming Agent Logs -->
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: #64748B; margin-bottom: 0.5rem;">
+                >> REAL-TIME AGENT TELEMETRY STREAM
+              </div>
+              <div class="log-stream-pane" id="terminalLogStream">
+                <!-- Logs typed here in real-time -->
+              </div>
+            </div>
+
+            <!-- Right: 3-Way Matching Dossier & Communication Draft -->
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: #64748B; margin-bottom: 0.5rem;">
+                >> STRUCTURED AUDIT DOSSIER & COMMUNICATION DRAFT
+              </div>
+              <div class="dossier-pane">
+                <div class="dossier-header">
+                  <div class="dossier-title" id="dossierTitle">INV-2026-001 // RedPillar Cloud Solutions LLC</div>
+                  <span class="dossier-status-pill status-success" id="dossierStatusPill">AUTO_APPROVE</span>
+                </div>
+
+                <div id="dossierInfo">
+                  <!-- Info grid injected here -->
+                </div>
+
+                <div style="font-family: var(--font-mono); font-size: 0.68rem; color: #94A3B8; margin-top: 0.5rem;">
+                  AUTONOMOUS OUTPUT DRAFT:
+                </div>
+                <div class="dossier-comm-box" id="dossierCommunication">
+                  <!-- Draft text injected here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 5: SYSTEM TELEMETRY & SPECS
+         ========================================================================== -->
+    <section id="telemetry">
+      <div class="section-label">
+        <span>[ 05 // SYSTEM SPECS ]</span>
+      </div>
+      <h2 class="section-title">
+        PRODUCTION <span class="ndot-accent">BENCHMARKS</span>
+      </h2>
+      <p class="section-description">
+        Engineered for zero-hallucination compliance and high-throughput enterprise transactional volume.
+      </p>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-number">0.38<span style="font-size: 1.4rem;">S</span></div>
+          <div class="metric-label">Mean Triage Latency</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-number">99.4<span style="font-size: 1.4rem;">%</span></div>
+          <div class="metric-label">Semantic Match Accuracy</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-number">84<span style="font-size: 1.4rem;">%</span></div>
+          <div class="metric-label">Clerk Touch Reduction</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-number">$0<span style="font-size: 1.4rem;">.00</span></div>
+          <div class="metric-label">Unallocated Cash Drift</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer>
+    <div class="site-container footer-inner">
+      <div style="display: flex; align-items: center; gap: 0.8rem;">
+        <span class="glyph-led"></span>
+        <span>IBM // FIN_OS (R) &copy; 2026</span>
+      </div>
+      <div>
+        <span>COORDINATES: 41.1272&deg; N, 73.7082&deg; W (ARMONK, NY)</span>
+      </div>
+      <div>
+        <span>POWERED BY RAG + AGENTIC AI</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/scenarios_data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
