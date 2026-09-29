@@ -279,3 +279,8 @@ const ASCII_IBM_PC = `
     | [=====] [=====] [=====] [=====] [=====] [=====] [=====]    |
     ==============================================================
 `;
+
+if (typeof window !== 'undefined') {
+  window.SCENARIOS = SCENARIOS;
+  window.RETRO_IBM_ASCII = RETRO_IBM_ASCII;
+}

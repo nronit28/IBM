@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM // FIN_OS (R) — AP Autonomous Cockpit & Simulation Terminal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23D71920'/></svg>">
+</head>
+<body class="cockpit-page-body">
+
+  <div class="site-container">
+
+    <!-- COCKPIT TOP NAVIGATION BAR -->
+    <header class="cockpit-top-bar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="index.html" class="btn-nav-back">
+          <span>&larr;</span>
+          <span>OVERVIEW</span>
+        </a>
+        <div class="brand-badge" style="background: transparent; border: none; padding: 0;">
+          <span class="glyph-led"></span>
+          <span>IBM // FIN_OS (R) COCKPIT</span>
+        </div>
+      </div>
+
+      <div class="cockpit-telemetry-badge">
+        <span class="dot"></span>
+        <span>SAP S/4HANA ONLINE // SQLITE PERSISTENT // GEMINI 2.5 FLASH ACTIVE</span>
+      </div>
+
+      <div style="display: flex; gap: 0.6rem; align-items: center;">
+        <button class="btn-retro-secondary" id="btnOpenDataLab" style="color: #38BDF8; border-color: rgba(56,189,248,0.4); font-size: 0.72rem; padding: 0.35rem 0.75rem;">
+          📁 UPLOAD & SYNTHETIC DATA
+        </button>
+        <button class="btn-retro-secondary" id="btnGeminiConfig" style="color: #00E575; border-color: rgba(0,229,117,0.4); font-size: 0.72rem; padding: 0.35rem 0.75rem;">
+          ✨ GEMINI 2.5 FLASH
+        </button>
+        <button class="btn-retro-secondary" id="btnOpenCustomInvoice" style="font-size: 0.72rem; padding: 0.35rem 0.75rem;">
+          + CUSTOM INVOICE
+        </button>
+      </div>
+    </header>
+
+    <!-- WORKBENCH HEADER & METRICS STRIP -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div class="section-label">
+          <span>[ DEDICATED WORKSTATION // REAL-TIME DISBURSEMENT RUNTIME ]</span>
+        </div>
+        <h1 style="font-family: var(--font-ndot); font-size: 2.2rem; margin: 0; line-height: 1.1;">
+          AP SIMULATION <span class="ndot-accent">COCKPIT</span>
+        </h1>
+      </div>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <div style="background: rgba(0,0,0,0.04); border: 1px solid var(--border-light); padding: 0.4rem 0.8rem; border-radius: var(--pill-radius); font-family: var(--font-mono); font-size: 0.72rem; color: #475569;">
+          SETTLEMENT RAILS: <strong style="color: #000;">NACHA ACH + ISO 20022</strong>
+        </div>
+        <div style="background: rgba(0,0,0,0.04); border: 1px solid var(--border-light); padding: 0.4rem 0.8rem; border-radius: var(--pill-radius); font-family: var(--font-mono); font-size: 0.72rem; color: #475569;">
+          CONTRACT GROUNDING: <strong style="color: #000;">SOW-IBM-2025-09 (RAG)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN AP WORKSTATION TERMINAL -->
+    <div class="terminal-card cockpit-terminal-card">
+      <!-- Terminal Header -->
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span class="t-dot red"></span>
+          <span class="t-dot yellow" id="terminalStatusDot"></span>
+          <span class="t-dot green"></span>
+        </div>
+        <div class="terminal-title">IBM // AP_RUNTIME_V2.1 [SAP S/4HANA + GEMINI 2.5 + NACHA + ISO 20022]</div>
+        <div style="font-family: var(--font-mono); font-size: 0.68rem; color: #64748B;">
+          SESSION ID: AP-8841-LIVE
+        </div>
+      </div>
+
+      <!-- Scenario Pills Selector Bar -->
+      <div class="scenario-pills-bar" id="scenarioPills">
+        <!-- Populated by app.js -->
+      </div>
+
+      <!-- Terminal Output Body -->
+      <div class="terminal-body">
+        <div class="terminal-content-grid">
+          <!-- Left: Streaming Agent Logs & Gemini Reasoning Subtabs -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <div class="terminal-tab-group">
+                <button class="t-subtab active" id="tabTelemetry">>> TELEMETRY STREAM</button>
+                <button class="t-subtab" id="tabGeminiReasoning">✨ GEMINI 2.5 FLASH REASONING</button>
+              </div>
+            </div>
+            <div class="log-stream-pane" id="terminalLogStream">
+              <!-- Logs typed here in real-time -->
+            </div>
+            <div class="gemini-reasoning-pane" id="geminiReasoningPane">
+              <!-- Gemini Chain of Thought injected here -->
+            </div>
+          </div>
+
+          <!-- Right: 3-Way Matching Dossier & Communication Draft -->
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: #64748B; margin-bottom: 0.5rem;">
+              >> STRUCTURED AUDIT DOSSIER & COMMUNICATION DRAFT
+            </div>
+            <div class="dossier-pane">
+              <div class="dossier-header">
+                <div class="dossier-title" id="dossierTitle">INV-2026-001 // RedPillar Cloud Solutions LLC</div>
+                <span class="dossier-status-pill status-success" id="dossierStatusPill">AUTO_APPROVE</span>
+              </div>
+
+              <div id="dossierInfo">
+                <!-- Info grid injected here -->
+              </div>
+
+              <div style="font-family: var(--font-mono); font-size: 0.68rem; color: #94A3B8; margin-top: 0.5rem;">
+                AUTONOMOUS OUTPUT DRAFT:
+              </div>
+              <div class="dossier-comm-box" id="dossierCommunication">
+                <!-- Draft text injected here -->
+              </div>
+
+              <!-- Interactive Human-in-the-Loop (HITL) Action Console -->
+              <div class="dossier-actions-container" id="dossierActionsContainer">
+                <div style="font-family: var(--font-mono); font-size: 0.68rem; color: #94A3B8; margin-top: 0.6rem; margin-bottom: 0.4rem;">
+                  >> HUMAN-IN-THE-LOOP & PAYMENT EXECUTION CONTROLS:
+                </div>
+                <div class="dossier-buttons-row" id="dossierActionButtons">
+                  <!-- Populated dynamically based on invoice status -->
+                </div>
+                <!-- Settlement Confirmation Card -->
+                <div class="settlement-receipt-card" id="settlementCard" style="display: none;">
+                  <div class="settlement-header">
+                    <span class="settlement-title">SETTLEMENT RECEIPT // CLEARED</span>
+                    <span class="settlement-rail-tag" id="settlementRailTag">ACH NACHA</span>
+                  </div>
+                  <div class="settlement-details-grid" id="settlementDetailsGrid">
+                    <!-- Reference, Trace ID, Timestamp -->
+                  </div>
+                  <div class="settlement-download-row">
+                    <button class="btn-retro-secondary" id="btnViewPayload">INSPECT PAYLOAD</button>
+                    <button class="btn-retro-secondary" id="btnDownloadAch">DOWNLOAD .ACH</button>
+                    <button class="btn-retro-secondary" id="btnDownloadXml">DOWNLOAD .XML</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERSISTENT DATABASE LEDGER & TRANSACTION HISTORY TABLE -->
+    <div class="ledger-section">
+      <div class="ledger-header">
+        <div>
+          <span class="ledger-title">SQLITE LEDGER // PERSISTENT INVOICE & DISBURSEMENT QUEUE</span>
+          <div style="font-family: var(--font-mono); font-size: 0.68rem; color: #64748B; margin-top: 0.2rem;">
+            Real-time synchronization with ap_finance.db across all active SAP Purchase Orders
+          </div>
+        </div>
+        <button class="btn-retro-secondary" id="btnRefreshLedger" style="font-size: 0.68rem; padding: 0.25rem 0.65rem;">
+          ↻ REFRESH LEDGER
+        </button>
+      </div>
+
+      <div class="ledger-table-wrapper">
+        <table class="ledger-table" id="liveLedgerTable">
+          <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Vendor</th>
+              <th>PO Number</th>
+              <th>Amount</th>
+              <th>Match Status</th>
+              <th>Discrepancy</th>
+              <th>Action Type</th>
+              <th>Payment State</th>
+              <th>Rail</th>
+              <th>Reference</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerTableBody">
+            <!-- Populated dynamically via /api/invoices -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal for Inspecting Raw ACH / ISO 20022 Settlement Payloads -->
+  <div class="retro-modal-backdrop" id="payloadModalBackdrop" style="display: none;">
+    <div class="retro-modal">
+      <div class="retro-modal-header">
+        <span class="retro-modal-title" id="modalTitle">BANKING SETTLEMENT PAYLOAD</span>
+        <button class="retro-modal-close" id="btnModalClose">&times;</button>
+      </div>
+      <div class="retro-modal-tabs">
+        <button class="retro-tab active" id="tabNacha">NACHA ACH (94-COL)</button>
+        <button class="retro-tab" id="tabIso">ISO 20022 (PAIN.001 XML)</button>
+      </div>
+      <pre class="retro-modal-code" id="modalPayloadContent"></pre>
+      <div class="retro-modal-footer">
+        <button class="btn-retro-secondary" id="btnModalCopy">COPY TO CLIPBOARD</button>
+        <button class="btn-primary" id="btnModalDownload" style="font-size: 0.72rem; padding: 0.4rem 0.9rem;">DOWNLOAD FILE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Gemini API Key Configuration -->
+  <div class="retro-modal-backdrop" id="geminiKeyModalBackdrop" style="display: none;">
+    <div class="retro-modal" style="max-width: 520px;">
+      <div class="retro-modal-header">
+        <span class="retro-modal-title">AI ENGINE // GOOGLE GEMINI 2.5 FLASH</span>
+        <button class="retro-modal-close" id="btnGeminiModalClose">&times;</button>
+      </div>
+      <div style="padding: 1.25rem;">
+        <p style="font-family: var(--font-mono); font-size: 0.74rem; color: #94A3B8; margin-bottom: 1rem; line-height: 1.5;">
+          The system uses Google's latest <strong>gemini-2.5-flash</strong> model for multi-modal contract clause comprehension, discrepancy quantification, and vendor dispute composition.
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="inputGeminiApiKey">GOOGLE GEMINI API KEY:</label>
+          <input type="password" class="form-input" id="inputGeminiApiKey" placeholder="AIzaSy..." />
+        </div>
+        <div id="geminiKeyStatusMsg" style="font-family: var(--font-mono); font-size: 0.72rem; color: #00E575; min-height: 1.2rem;"></div>
+      </div>
+      <div class="retro-modal-footer">
+        <button class="btn-retro-secondary" id="btnTestGeminiDefault">USE BUILT-IN ACTIVE ENGINE</button>
+        <button class="btn-primary" id="btnSaveGeminiKey" style="font-size: 0.72rem; padding: 0.45rem 1rem;">ACTIVATE KEY</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Creating and Submitting a Custom Invoice -->
+  <div class="retro-modal-backdrop" id="customInvoiceModalBackdrop" style="display: none;">
+    <div class="retro-modal" style="max-width: 560px;">
+      <div class="retro-modal-header">
+        <span class="retro-modal-title">CUSTOM INVOICE SANDBOX // TEST AI 3-WAY MATCH</span>
+        <button class="retro-modal-close" id="btnCustomModalClose">&times;</button>
+      </div>
+      <div style="padding: 1.25rem; max-height: 65vh; overflow-y: auto;">
+        <div class="form-group">
+          <label class="form-label" for="inputCustVendor">VENDOR NAME:</label>
+          <input type="text" class="form-input" id="inputCustVendor" value="Cognitive Platform Solutions LLC" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputCustPo">PURCHASE ORDER NUMBER:</label>
+          <input type="text" class="form-input" id="inputCustPo" value="PO-45009812" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputCustRole">ROLE / SERVICE DESCRIPTION:</label>
+          <input type="text" class="form-input" id="inputCustRole" value="Senior Infrastructure Consultant Tier 1" />
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label class="form-label" for="inputCustRate">HOURLY RATE ($):</label>
+            <input type="number" class="form-input" id="inputCustRate" value="170.0" step="5" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inputCustHours">HOURS BILLED:</label>
+            <input type="number" class="form-input" id="inputCustHours" value="50.0" step="1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputCustTotal">INVOICE TOTAL AMOUNT ($):</label>
+          <input type="number" class="form-input" id="inputCustTotal" value="8500.0" readonly style="color: #00E575; font-weight: bold;" />
+        </div>
+      </div>
+      <div class="retro-modal-footer">
+        <button class="btn-retro-secondary" id="btnCustCancel">CANCEL</button>
+        <button class="btn-primary" id="btnSubmitCustomInvoice" style="font-size: 0.72rem; padding: 0.45rem 1rem;">RUN AI 3-WAY MATCH</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Data Lab: Ingestion & Synthetic Engine -->
+  <div class="retro-modal-backdrop" id="dataLabModalBackdrop" style="display: none;">
+    <div class="retro-modal" style="max-width: 680px;">
+      <div class="retro-modal-header">
+        <span class="retro-modal-title">DATA LAB // INGESTION & SYNTHETIC ENGINE</span>
+        <button class="retro-modal-close" id="btnDataLabModalClose">&times;</button>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="retro-modal-tabs">
+        <button class="datalab-tab active" id="tabBtnUpload">
+          📤 INGESTION / FILE UPLOAD
+        </button>
+        <button class="datalab-tab" id="tabBtnSynthetic">
+          ⚡ SYNTHETIC DATA GENERATOR
+        </button>
+      </div>
+
+      <div style="padding: 1.25rem; max-height: 65vh; overflow-y: auto;">
+
+        <!-- PANEL 1: FILE UPLOAD -->
+        <div id="panelUpload">
+          <p style="font-family: var(--font-mono); font-size: 0.75rem; color: #94A3B8; margin-top: 0; line-height: 1.5;">
+            Ingest external enterprise invoices into the autonomous multi-agent pipeline. Supports batch JSON arrays or flat CSV tables with automatic OCR line normalization.
+          </p>
+
+          <!-- Drag and Drop Dropzone -->
+          <div class="retro-dropzone" id="uploadDropzone">
+            <div style="font-size: 2rem; margin-bottom: 0.4rem;">📁</div>
+            <div style="font-family: var(--font-ndot); font-size: 1.1rem; color: #FFF; margin-bottom: 0.25rem;">
+              DRAG & DROP INVOICE FILE HERE
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: #94A3B8;">
+              Supports <strong>.json</strong> (structured) or <strong>.csv</strong> (tabular). Click to browse filesystem.
+            </div>
+            <input type="file" id="fileInvoiceInput" accept=".json,.csv,.txt" style="display: none;" />
+          </div>
+
+          <!-- Direct Raw Text/Paste Area -->
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <label class="form-label" style="margin-bottom: 0;">OR PASTE JSON / CSV PAYLOAD:</label>
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="btn-retro-secondary" id="btnDownloadJsonTemplate" style="font-size: 0.65rem; padding: 0.2rem 0.5rem;">
+                  TEMPLATE .JSON
+                </button>
+                <button class="btn-retro-secondary" id="btnDownloadCsvTemplate" style="font-size: 0.65rem; padding: 0.2rem 0.5rem;">
+                  TEMPLATE .CSV
+                </button>
+              </div>
+            </div>
+            <textarea class="form-input" id="textInvoicePayload" rows="5" placeholder='Paste JSON array or CSV text here...' style="font-family: var(--font-mono); font-size: 0.72rem; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Parsed preview info -->
+          <div id="uploadPreviewBox" style="display: none; margin-top: 0.75rem; background: rgba(0,229,117,0.08); border: 1px solid rgba(0,229,117,0.3); border-radius: 6px; padding: 0.6rem 0.8rem; font-family: var(--font-mono); font-size: 0.72rem; color: #00E575;">
+          </div>
+        </div>
+
+        <!-- PANEL 2: SYNTHETIC DATA GENERATOR -->
+        <div id="panelSynthetic" style="display: none;">
+          <p style="font-family: var(--font-mono); font-size: 0.75rem; color: #94A3B8; margin-top: 0; line-height: 1.5;">
+            Dynamically synthesize realistic enterprise AP invoices to pressure-test agent matching, RAG contract clause grounding, and SAP BAPI exception handlers.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="selectSyntheticPreset">TEST SCENARIO PRESET:</label>
+            <select class="form-input" id="selectSyntheticPreset" style="font-family: var(--font-mono); font-size: 0.78rem;">
+              <option value="ALL">★ FULL ENTERPRISE SUITE (Diverse Edge Cases)</option>
+              <option value="SYN_CLEAN_MILESTONE">SYN-01: Clean 3-Way Match (Milestone Deliverable)</option>
+              <option value="SYN_SEMANTIC_ROLE">SYN-02: Semantic Role Alias Variant (RAG Vector Resolution)</option>
+              <option value="SYN_RATE_OVERCHARGE">SYN-03: Contract Rate Overcharge (Variance Deduction)</option>
+              <option value="SYN_MISSING_GR">SYN-04: Missing Goods/Services Receipt (SAP Hold)</option>
+              <option value="SYN_TAX_TOLERANCE">SYN-05: Minor Tax Rounding Tolerance ($12.50 Absorbed)</option>
+              <option value="SYN_QUANTITY_OVERRUN">SYN-06: Quantity Overrun (Exceeds PO Authorized Cap)</option>
+              <option value="SYN_UNAPPROVED_ROLE">SYN-07: Uncontracted Service Role (SOW Exclusion)</option>
+              <option value="SYN_VOLUME_DISCOUNT">SYN-08: Volume Discount Rebate Omission (5% Clause)</option>
+              <option value="SYN_DUPLICATE_BILLING">SYN-09: Duplicate Billing Anomaly (Hash Collision)</option>
+              <option value="SYN_PARTIAL_GR">SYN-10: Partial Goods Receipt Sign-Off (Line Balance Hold)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between;">
+              <label class="form-label" for="rangeSyntheticCount">BATCH GENERATION SIZE:</label>
+              <span id="labelSyntheticCount" style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: bold; color: #38BDF8;">5 Invoices</span>
+            </div>
+            <input type="range" id="rangeSyntheticCount" min="1" max="10" value="5" style="width: 100%; accent-color: #38BDF8;" />
+          </div>
+
+          <!-- Scenario info callout -->
+          <div id="scenarioInfoBox" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 0.75rem; margin-top: 0.75rem;">
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: #38BDF8; font-weight: bold; margin-bottom: 0.25rem;" id="specTitle">
+              Full Multi-Scenario Enterprise AP Test Suite
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.70rem; color: #94A3B8; line-height: 1.4;" id="specDesc">
+              Generates a balanced batch across clean matches, rate bumps, missing receipts, quantity overruns, and tax tolerances. Each invoice is checked by RAG, SAP, and Gemini Reasoner.
+            </div>
+          </div>
+
+          <div id="syntheticStatusMsg" style="margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.72rem; color: #00E575; min-height: 1.2rem;"></div>
+        </div>
+
+      </div>
+
+      <div class="retro-modal-footer">
+        <button class="btn-retro-secondary" id="btnDataLabCancel">CANCEL</button>
+        <button class="btn-primary" id="btnDataLabExecute" style="font-size: 0.72rem; padding: 0.45rem 1rem; background: #2563EB; border-color: #2563EB; color: #fff;">
+          ⚡ INGEST & RUN MATCH
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border-light); font-family: var(--font-mono); font-size: 0.74rem; color: #64748B; text-align: center;">
+    <div>IBM // FIN_OS (R) &copy; 2026 — AUTONOMOUS 3-WAY MATCHING & SETTLEMENT RUNTIME</div>
+  </footer>
+
+  <script type="module" src="js/scenarios_data.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

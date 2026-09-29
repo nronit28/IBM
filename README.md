@@ -57,15 +57,28 @@ Or run a specific scenario (e.g., rate discrepancy resolution):
 python -m src.invoice_matcher.main --scenario S03
 ```
 
-### 2. Launch the Web Dashboard
+### 2. Frontend Build & Web Dashboard
 
-Start the local server:
+Install dependencies and build the production bundle:
+
+```bash
+npm install
+npm run build
+```
+
+Start the local server (auto-detects and serves the optimized `dist/` bundle):
 
 ```bash
 python -m src.invoice_matcher.server
 ```
 
 Open [http://localhost:8080](http://localhost:8080) in your browser.
+
+For hot-reloading frontend development:
+
+```bash
+npm run dev
+```
 
 ### 3. Run the Test Suite
 

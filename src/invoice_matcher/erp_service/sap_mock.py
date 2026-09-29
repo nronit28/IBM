@@ -96,6 +96,9 @@ class SAPConnector:
         """
         Post invoice to AP ledger and deduct remaining balance from the PO line.
         """
+        if invoice_id in self.posted_invoices:
+            return True
+
         po = self.get_purchase_order(po_number)
         if not po:
             return False

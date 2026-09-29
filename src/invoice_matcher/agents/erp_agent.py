@@ -72,12 +72,18 @@ class ERPAgent:
             status_entry["po_remaining_qty"] = po_line.remaining_qty
             status_entry["po_remaining_amount"] = po_line.remaining_amount
 
+            # If this invoice was already cleared in ERP, consider its own cleared amount available
+            already_cleared = self.erp.posted_invoices.get(invoice.invoice_id)
+            effective_remaining = po_line.remaining_amount
+            if already_cleared and already_cleared.get("po_number") == invoice.po_number and already_cleared.get("line_num") == po_line.line_num:
+                effective_remaining += already_cleared.get("amount", 0.0)
+
             # 1. Check PO remaining funds
-            if item.total_amount > po_line.remaining_amount:
+            if item.total_amount > effective_remaining:
                 status_entry["status"] = MatchStatus.EXCEPTION_PO_BALANCE_EXCEEDED
                 status_entry["erp_details"] = (
                     f"Line amount ${item.total_amount:,.2f} exceeds remaining PO balance of "
-                    f"${po_line.remaining_amount:,.2f} (Line {po_line.line_num})."
+                    f"${effective_remaining:,.2f} (Line {po_line.line_num})."
                 )
                 logs.append(f"ERPAgent: Line {item.item_id} exceeds PO balance on line {po_line.line_num}.")
                 line_erp_status[item.item_id] = status_entry
