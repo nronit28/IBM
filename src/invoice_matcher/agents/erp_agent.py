@@ -2,7 +2,7 @@
 ERP Action Agent: Interfaces with SAP S/4HANA connector for PO balances and GR/SR sign-offs.
 """
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from ..models.invoice import Invoice
 from ..models.matching import MatchStatus
 from ..erp_service.sap_mock import SAPConnector

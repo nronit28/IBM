@@ -146,8 +146,9 @@ class FinancialAppHandler(SimpleHTTPRequestHandler):
                 "agents": ["Normalizer", "ContractValidator_RAG", "ERPAction_SAP", "ResolutionAgent", "GeminiAPReasoner"],
                 "rails": ["ACH_NACHA_94COL", "ISO20022_PAIN001_09"],
                 "database": "SQLITE_ACID",
-                "gemini_model": RUNTIME.gemini_reasoner.DEFAULT_MODEL,
+                "gemini_model": RUNTIME.gemini_reasoner.model,
                 "gemini_live": RUNTIME.gemini_reasoner.is_live(),
+                "gemini_available_models": RUNTIME.gemini_reasoner.AVAILABLE_MODELS,
                 "version": "2.1.0"
             })
 
@@ -245,6 +246,9 @@ class FinancialAppHandler(SimpleHTTPRequestHandler):
         # POST /api/match
         if path == "/api/match":
             inv_id = payload.get("invoice_id")
+            model_override = payload.get("model")
+            if model_override:
+                RUNTIME.gemini_reasoner.set_model(model_override)
             inv = RUNTIME.get_invoice_by_id(inv_id)
             if not inv:
                 return self._send_json(404, {"error": f"Invoice {inv_id} not found."})
@@ -390,18 +394,27 @@ class FinancialAppHandler(SimpleHTTPRequestHandler):
                 "message": f"Goods Receipt {new_gr.receipt_id} approved. Invoice {inv_id} re-matched and cleared for payment!"
             })
 
-        # POST /api/settings/gemini-key
-        if path == "/api/settings/gemini-key":
-            api_key = payload.get("api_key", "").strip()
+        # POST /api/settings/gemini-key or /api/settings/gemini-model
+        if path in ("/api/settings/gemini-key", "/api/settings/gemini-model"):
+            api_key = payload.get("api_key", "").strip() if payload.get("api_key") else ""
+            model = payload.get("model", "").strip() if payload.get("model") else ""
+
+            if model:
+                RUNTIME.gemini_reasoner.set_model(model)
             if api_key:
-                RUNTIME.gemini_reasoner.set_api_key(api_key)
-                return self._send_json(200, {
-                    "success": True,
-                    "message": "Gemini API Key activated for live cloud reasoning.",
-                    "live": RUNTIME.gemini_reasoner.is_live(),
-                    "model": RUNTIME.gemini_reasoner.DEFAULT_MODEL
-                })
-            return self._send_json(400, {"error": "API key cannot be empty."})
+                RUNTIME.gemini_reasoner.set_api_key(api_key, model=model or None)
+
+            if not api_key and not model:
+                return self._send_json(400, {"error": "API key or model identifier is required."})
+
+            mode_str = "Live Cloud Inference Active" if RUNTIME.gemini_reasoner.is_live() else "Built-in Autonomous Engine Active"
+            return self._send_json(200, {
+                "success": True,
+                "message": f"Gemini configured: {RUNTIME.gemini_reasoner.model} ({mode_str}).",
+                "live": RUNTIME.gemini_reasoner.is_live(),
+                "model": RUNTIME.gemini_reasoner.model,
+                "available_models": RUNTIME.gemini_reasoner.AVAILABLE_MODELS
+            })
 
         # POST /api/invoices/custom
         if path == "/api/invoices/custom":

@@ -296,13 +296,13 @@ _</pre>
             <span class="t-dot yellow" id="terminalStatusDot"></span>
             <span class="t-dot green"></span>
           </div>
-          <div class="terminal-title">IBM // AP_RUNTIME_V2.1 (SAP S/4HANA + GEMINI 2.5)</div>
+          <div class="terminal-title">IBM // AP_RUNTIME_V2.1 (SAP S/4HANA + GEMINI 3.8)</div>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
             <button class="btn-retro-secondary" id="btnOpenDataLab" style="font-size: 0.65rem; padding: 0.2rem 0.55rem; border-color: rgba(56,189,248,0.5); color: #38BDF8;">
               📁 UPLOAD & SYNTHETIC DATA
             </button>
             <button class="btn-retro-secondary" id="btnGeminiConfig" style="font-size: 0.65rem; padding: 0.2rem 0.55rem; border-color: rgba(0,229,117,0.4); color: #00E575;">
-              ✨ GEMINI 2.5 FLASH
+              ✨ GEMINI 3.8 FLASH
             </button>
             <button class="btn-retro-secondary" id="btnOpenCustomInvoice" style="font-size: 0.65rem; padding: 0.2rem 0.55rem;">
               + CUSTOM INVOICE
@@ -323,7 +323,7 @@ _</pre>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <div class="terminal-tab-group">
                   <button class="t-subtab active" id="tabTelemetry">>> TELEMETRY STREAM</button>
-                  <button class="t-subtab" id="tabGeminiReasoning">✨ GEMINI 2.5 FLASH REASONING</button>
+                  <button class="t-subtab" id="tabGeminiReasoning">✨ GEMINI 3.8 FLASH REASONING</button>
                 </div>
               </div>
               <div class="log-stream-pane" id="terminalLogStream">
@@ -440,26 +440,43 @@ _</pre>
         <button class="btn-retro-secondary" id="btnModalCopy">COPY TO CLIPBOARD</button>
         <button class="btn-primary" id="btnModalDownload" style="font-size: 0.72rem; padding: 0.4rem 0.9rem;">DOWNLOAD FILE</button>
       </div>
-  <!-- Modal for Gemini API Key Configuration -->
+  <!-- Modal for Gemini API Key & Model Configuration -->
   <div class="retro-modal-backdrop" id="geminiKeyModalBackdrop" style="display: none;">
-    <div class="retro-modal" style="max-width: 520px;">
+    <div class="retro-modal" style="max-width: 540px;">
       <div class="retro-modal-header">
-        <span class="retro-modal-title">AI ENGINE // GOOGLE GEMINI 2.5 FLASH</span>
+        <span class="retro-modal-title" id="geminiModalTitle">AI ENGINE // GOOGLE GEMINI CO-PILOT</span>
         <button class="retro-modal-close" id="btnGeminiModalClose">&times;</button>
       </div>
       <div style="padding: 1.25rem;">
         <p style="font-family: var(--font-mono); font-size: 0.74rem; color: #94A3B8; margin-bottom: 1rem; line-height: 1.5;">
-          The system uses Google's latest <strong>gemini-2.5-flash</strong> model for multi-modal contract clause comprehension, discrepancy quantification, and vendor dispute composition.
+          Select from current-generation Gemini models (Gemini 3.8 Flash, Gemini 3.8 Pro, etc.). Legacy 2.5 models are deprecated. Powers multi-modal contract clause comprehension, discrepancy arbitration, and automated vendor dispute composition.
         </p>
+
         <div class="form-group">
-          <label class="form-label" for="inputGeminiApiKey">GOOGLE GEMINI API KEY:</label>
-          <input type="password" class="form-input" id="inputGeminiApiKey" placeholder="AIzaSy..." />
+          <label class="form-label" for="selectGeminiModel">SELECT GEMINI MODEL (CURRENT GEN):</label>
+          <select class="form-input" id="selectGeminiModel" style="background: #0F172A; color: #00E575; font-family: var(--font-mono); cursor: pointer; border-color: rgba(0, 229, 117, 0.4);">
+            <option value="gemini-3.8-flash" selected>Gemini 3.8 Flash (Recommended · High Performance)</option>
+            <option value="gemini-3.8-pro">Gemini 3.8 Pro (Deep Reasoning & Contract Arbitration)</option>
+            <option value="gemini-3.5-flash">Gemini 3.5 Flash (Fast & Cost Efficient)</option>
+            <option value="gemini-3.5-pro">Gemini 3.5 Pro (Complex Financial Synthesis)</option>
+            <option value="custom">Custom Model Identifier...</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="groupGeminiCustomModel" style="display: none;">
+          <label class="form-label" for="inputGeminiCustomModel">CUSTOM MODEL IDENTIFIER:</label>
+          <input type="text" class="form-input" id="inputGeminiCustomModel" placeholder="e.g. gemini-3.8-flash-preview" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputGeminiApiKey">GOOGLE GEMINI API KEY (OPTIONAL FOR BUILT-IN):</label>
+          <input type="password" class="form-input" id="inputGeminiApiKey" placeholder="AIzaSy... (leave blank to use built-in engine)" />
         </div>
         <div id="geminiKeyStatusMsg" style="font-family: var(--font-mono); font-size: 0.72rem; color: #00E575; min-height: 1.2rem;"></div>
       </div>
       <div class="retro-modal-footer">
-        <button class="btn-retro-secondary" id="btnTestGeminiDefault">USE BUILT-IN ACTIVE ENGINE</button>
-        <button class="btn-primary" id="btnSaveGeminiKey" style="font-size: 0.72rem; padding: 0.45rem 1rem;">ACTIVATE KEY</button>
+        <button class="btn-retro-secondary" id="btnTestGeminiDefault">USE BUILT-IN ENGINE</button>
+        <button class="btn-primary" id="btnSaveGeminiKey" style="font-size: 0.72rem; padding: 0.45rem 1rem;">APPLY & ACTIVATE</button>
       </div>
     </div>
   </div>

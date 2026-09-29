@@ -64,6 +64,17 @@ class TestAPIEndpoints(unittest.TestCase):
         self.assertEqual(body["system"], "IBM // FIN_OS (R)")
         self.assertIn("ACH_NACHA_94COL", body["rails"])
         self.assertIn("ISO20022_PAIN001_09", body["rails"])
+        self.assertEqual(body["gemini_model"], "gemini-3.8-flash")
+        self.assertIn("gemini_available_models", body)
+
+    def test_api_gemini_settings_model_selection(self):
+        status_code, body = make_request("/api/settings/gemini-key", method="POST", payload={"model": "gemini-3.8-pro"})
+        self.assertEqual(status_code, 200)
+        self.assertTrue(body["success"])
+        self.assertEqual(body["model"], "gemini-3.8-pro")
+
+        # Reset back to default
+        make_request("/api/settings/gemini-key", method="POST", payload={"model": "gemini-3.8-flash"})
 
     def test_api_invoices_list(self):
         status_code, body = make_request("/api/invoices")

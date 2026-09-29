@@ -1,12 +1,14 @@
 """
 Gemini AI Reasoning Engine for Accounts Payable 3-Way Matching and Policy Triage.
-Leverages Google's gemini-2.5-flash model via the official google-genai SDK
-for contract clause comprehension, discrepancy arbitration, and formal dispute composition.
+Leverages Google's current-generation Gemini models (gemini-3.8-flash, gemini-3.8-pro, etc.)
+via the official google-genai SDK for contract clause comprehension, discrepancy arbitration,
+and formal dispute composition. Legacy 2.5 models are deprecated.
 """
 
 import os
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
+from pathlib import Path
 
 try:
     from google import genai
@@ -16,13 +18,67 @@ except ImportError:
     GENAI_AVAILABLE = False
 
 
+AVAILABLE_MODELS = [
+    {
+        "id": "gemini-3.8-flash",
+        "name": "Gemini 3.8 Flash",
+        "description": "Recommended · Next-Gen Fast Reasoning & High Throughput",
+        "tier": "Production",
+    },
+    {
+        "id": "gemini-3.8-pro",
+        "name": "Gemini 3.8 Pro",
+        "description": "Deep Reasoning, Complex Clause Arbitration & Legal Synthesis",
+        "tier": "Production",
+    },
+    {
+        "id": "gemini-3.5-flash",
+        "name": "Gemini 3.5 Flash",
+        "description": "High Throughput & Efficient Financial Audit",
+        "tier": "Production",
+    },
+    {
+        "id": "gemini-3.5-pro",
+        "name": "Gemini 3.5 Pro",
+        "description": "Advanced Financial Analysis & Audit Trail Verification",
+        "tier": "Production",
+    },
+]
+DEFAULT_MODEL = "gemini-3.8-flash"
+
+
+def _load_env_file():
+    """Lightweight .env loader without third-party dependencies."""
+    candidates = [
+        Path.cwd() / ".env",
+        Path(__file__).resolve().parent.parent.parent.parent / ".env",
+    ]
+    for env_path in candidates:
+        if env_path.is_file():
+            try:
+                with open(env_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#") and "=" in line:
+                            k, v = line.split("=", 1)
+                            k, v = k.strip(), v.strip().strip("'\"")
+                            if k not in os.environ:
+                                os.environ[k] = v
+                break
+            except Exception:
+                pass
+
+
 class GeminiAPReasoner:
-    """AI Co-Pilot powered by gemini-2.5-flash for complex contract arbitration and AP triage."""
+    """AI Co-Pilot powered by current Gemini models (default: gemini-3.8-flash) for complex contract arbitration and AP triage."""
 
-    DEFAULT_MODEL = "gemini-2.5-flash"
+    DEFAULT_MODEL = DEFAULT_MODEL
+    AVAILABLE_MODELS = AVAILABLE_MODELS
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None):
+        _load_env_file()
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        self.model = model or os.environ.get("GEMINI_MODEL") or self.DEFAULT_MODEL
         self.client = None
         if GENAI_AVAILABLE and self.api_key:
             try:
@@ -30,8 +86,16 @@ class GeminiAPReasoner:
             except Exception:
                 self.client = None
 
-    def set_api_key(self, api_key: str):
-        """Dynamically configure or update Gemini API key."""
+    def set_model(self, model: str):
+        """Dynamically set the active Gemini model."""
+        if model and model.strip():
+            self.model = model.strip()
+            os.environ["GEMINI_MODEL"] = self.model
+
+    def set_api_key(self, api_key: str, model: Optional[str] = None):
+        """Dynamically configure or update Gemini API key and optional model."""
+        if model:
+            self.set_model(model)
         self.api_key = api_key
         os.environ["GEMINI_API_KEY"] = api_key
         if GENAI_AVAILABLE:
@@ -44,6 +108,16 @@ class GeminiAPReasoner:
         """Returns True if live Gemini client is authenticated."""
         return self.client is not None
 
+    def _format_model_display(self) -> str:
+        """Friendly display label for the active model."""
+        for m in self.AVAILABLE_MODELS:
+            if m["id"] == self.model:
+                return m["name"]
+        if self.model.startswith("gemini-"):
+            parts = self.model[len("gemini-"):].split("-")
+            return "Gemini " + " ".join(p.capitalize() for p in parts)
+        return self.model
+
     def analyze_invoice_matching(
         self,
         invoice_data: Dict[str, Any],
@@ -53,7 +127,7 @@ class GeminiAPReasoner:
     ) -> Dict[str, Any]:
         """
         Executes multi-step cognitive reasoning on 3-way match exceptions.
-        Uses gemini-2.5-flash when live, or high-fidelity deterministic reasoning engine when offline.
+        Uses the selected Gemini model (e.g. gemini-3.8-flash) when live, or high-fidelity deterministic reasoning engine when offline.
         """
         prompt = f"""
 You are the Lead Financial AI Auditor for IBM Global Accounts Payable.
@@ -78,7 +152,7 @@ Status: {preliminary_match.get('overall_status')}
 Discrepancy: ${preliminary_match.get('discrepancy_amount', 0.0):,.2f}
 
 Provide a JSON response with:
-1. "model_used": "{self.DEFAULT_MODEL}"
+1. "model_used": "{self.model}"
 2. "executive_summary": High-level financial summary (2-3 sentences).
 3. "chain_of_thought": Array of 4-5 numbered reasoning steps detailing contract rate interpretation, GR/SR status, PO balance checks, and administrative tolerance logic.
 4. "contract_citations": Array of specific legal clauses or SOW sections governing this decision.
@@ -91,7 +165,7 @@ Provide a JSON response with:
         if self.client:
             try:
                 response = self.client.models.generate_content(
-                    model=self.DEFAULT_MODEL,
+                    model=self.model,
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         response_mime_type="application/json",
@@ -100,8 +174,9 @@ Provide a JSON response with:
                 )
                 if response and response.text:
                     parsed = json.loads(response.text)
-                    parsed["engine"] = f"Google GenAI ({self.DEFAULT_MODEL})"
+                    parsed["engine"] = f"Google GenAI ({self.model})"
                     parsed["live_cloud"] = True
+                    parsed["model_used"] = self.model
                     return parsed
             except Exception as e:
                 # Log error and fall back to local neural simulator
@@ -188,8 +263,8 @@ Provide a JSON response with:
             conf = 0.85
 
         return {
-            "engine": f"Gemini 2.5 Flash AP Reasoner (Built-in Active Engine)",
-            "model_used": self.DEFAULT_MODEL,
+            "engine": f"Gemini {self._format_model_display()} AP Reasoner (Built-in Active Engine)",
+            "model_used": self.model,
             "live_cloud": False,
             "executive_summary": summary,
             "chain_of_thought": cot,

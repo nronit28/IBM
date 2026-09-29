@@ -1,6 +1,6 @@
 /**
  * IBM FINANCIAL SOLUTIONS // FRONTEND ENGINE
- * Interactive Terminal, Live REST API Client, Gemini 2.5 Flash AI Co-Pilot,
+ * Interactive Terminal, Live REST API Client, Gemini 3.8 Flash AI Co-Pilot,
  * Custom Invoice Sandbox, Payment Rails Execution, and Mechanical Audio FX.
  */
 
@@ -102,7 +102,7 @@ function initLiveCrtTicker() {
 
   const messages = [
     "A> SAP_AP.EXE\n>> CONNECTED\n>> PO: 45009812\n>> RAG: ONLINE\n_ ",
-    "A> GEMINI_2.5\n>> MODEL: FLASH\n>> REASONING: OK\n>> CITATION: OK\n_ ",
+    "A> GEMINI_3.8\n>> MODEL: FLASH\n>> REASONING: OK\n>> CITATION: OK\n_ ",
     "A> EXCEPTION\n>> TAX: +$8.50\n>> TOLERANCE: OK\n>> APPROVED\n_ ",
     "A> DISPUTE\n>> RATE: $195/H\n>> CAP: $170/H\n>> DRAFT SENT\n_ ",
     "A> NACHA_PAY\n>> ACH: GENERATED\n>> 94-COL: VALID\n>> CLEARED\n_ ",
@@ -120,6 +120,96 @@ function initLiveCrtTicker() {
 let ACTIVE_INVOICE_ID = "INV-2026-001";
 let ACTIVE_DISBURSEMENT = null;
 let ACTIVE_GEMINI_ANALYSIS = null;
+let ACTIVE_GEMINI_MODEL = "gemini-3.8-flash";
+let ACTIVE_GEMINI_LIVE = false;
+
+function formatModelDisplayName(modelId) {
+  if (!modelId) return "Gemini 3.8 Flash";
+  const known = {
+    "gemini-3.8-flash": "Gemini 3.8 Flash",
+    "gemini-3.8-pro": "Gemini 3.8 Pro",
+    "gemini-3.5-flash": "Gemini 3.5 Flash",
+    "gemini-3.5-pro": "Gemini 3.5 Pro"
+  };
+  if (known[modelId]) return known[modelId];
+  if (modelId.startsWith("gemini-")) {
+    return "Gemini " + modelId.substring(7).split("-").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ");
+  }
+  return modelId;
+}
+
+function formatModelShort(modelId) {
+  return formatModelDisplayName(modelId).toUpperCase();
+}
+
+function updateGeminiUI(modelId, isLive) {
+  if (modelId) ACTIVE_GEMINI_MODEL = modelId;
+  if (typeof isLive === 'boolean') ACTIVE_GEMINI_LIVE = isLive;
+
+  const shortName = formatModelShort(ACTIVE_GEMINI_MODEL);
+  const liveBadge = ACTIVE_GEMINI_LIVE ? ' (LIVE CLOUD)' : '';
+
+  // Update cockpit header action button
+  const gemBtn = document.getElementById('btnGeminiConfig');
+  const txtFull = document.getElementById('btnGeminiTxtFull');
+  const txtMed = document.getElementById('btnGeminiTxtMed');
+  const txtShort = document.getElementById('btnGeminiTxtShort');
+
+  if (txtFull) {
+    txtFull.textContent = `${shortName}${liveBadge}`;
+  } else if (gemBtn) {
+    gemBtn.textContent = `✨ ${shortName}${liveBadge}`;
+  }
+  if (txtMed) {
+    const family = shortName.includes('3.8') ? 'GEMINI 3.8' : (shortName.includes('3.5') ? 'GEMINI 3.5' : 'GEMINI');
+    txtMed.textContent = `${family}${ACTIVE_GEMINI_LIVE ? ' LIVE' : ''}`;
+  }
+  if (txtShort) {
+    txtShort.textContent = ACTIVE_GEMINI_LIVE ? 'LIVE' : 'GEMINI';
+  }
+
+  // Update telemetry status strip
+  const telemStatus = document.getElementById('telemGeminiStatus');
+  if (telemStatus) {
+    const family = shortName.includes('3.8') ? 'GEMINI 3.8' : (shortName.includes('3.5') ? 'GEMINI 3.5' : 'GEMINI');
+    const badgeText = ACTIVE_GEMINI_LIVE ? 'LIVE' : 'ACTIVE';
+    telemStatus.innerHTML = `${family} <strong class="telem-green" id="telemGeminiBadge">${badgeText}</strong>`;
+  }
+
+  // Update reasoning subtab label
+  const tabGem = document.getElementById('tabGeminiReasoning');
+  if (tabGem) {
+    tabGem.textContent = `✨ ${shortName} REASONING`;
+  }
+
+  // Update terminal title
+  const titleElem = document.querySelector('.terminal-title');
+  if (titleElem) {
+    titleElem.textContent = `IBM // AP_RUNTIME_V2.1 [SAP S/4HANA + ${shortName} + NACHA + ISO 20022]`;
+  }
+
+  // Sync select dropdown in modal
+  const selectModel = document.getElementById('selectGeminiModel');
+  const groupCustom = document.getElementById('groupGeminiCustomModel');
+  const inputCustom = document.getElementById('inputGeminiCustomModel');
+  if (selectModel) {
+    let matched = false;
+    for (let opt of selectModel.options) {
+      if (opt.value === ACTIVE_GEMINI_MODEL) {
+        selectModel.value = ACTIVE_GEMINI_MODEL;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      selectModel.value = 'custom';
+      if (groupCustom) groupCustom.style.display = 'block';
+      if (inputCustom) inputCustom.value = ACTIVE_GEMINI_MODEL;
+    } else {
+      if (groupCustom) groupCustom.style.display = 'none';
+    }
+  }
+}
 
 // Terminal Engine for Scenario Simulation & Live API Execution
 function initTerminalEngine() {
@@ -139,17 +229,14 @@ function initTerminalEngine() {
   fetch('/api/status')
     .then(r => r.json())
     .then(data => {
-      const titleElem = document.querySelector('.terminal-title');
-      if (titleElem && data.system) {
-        titleElem.textContent = `${data.system} [${data.status}: SAP + GEMINI 2.5 + NACHA + ISO 20022]`;
-      }
-      const gemBtn = document.getElementById('btnGeminiConfig');
-      if (gemBtn && data.gemini_live) {
-        gemBtn.textContent = '✨ GEMINI 2.5 (LIVE CLOUD)';
+      if (data.gemini_model) {
+        updateGeminiUI(data.gemini_model, data.gemini_live);
+      } else {
+        updateGeminiUI(ACTIVE_GEMINI_MODEL, false);
       }
     })
     .catch(() => {
-      // Backend offline, fallback client mode
+      updateGeminiUI(ACTIVE_GEMINI_MODEL, false);
     });
 
   // Render scenario selector buttons
@@ -191,7 +278,7 @@ function initTerminalEngine() {
       const apiResp = await fetch('/api/match', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ invoice_id: scn.invoiceId })
+        body: JSON.stringify({ invoice_id: scn.invoiceId, model: ACTIVE_GEMINI_MODEL })
       });
       if (apiResp.ok) {
         const body = await apiResp.json();
@@ -512,7 +599,7 @@ function renderGeminiReasoning(analysis) {
 
   pane.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 0.4rem;">
-      <span style="font-weight:700; color:#00E575;">✨ ${analysis.model_used.toUpperCase()} REASONING</span>
+      <span style="font-weight:700; color:#00E575;">✨ ${formatModelShort(analysis.model_used || ACTIVE_GEMINI_MODEL)} REASONING</span>
       <span style="font-size:0.68rem; color:#94A3B8;">${analysis.engine || 'Active Reasoner'}</span>
     </div>
     
@@ -629,11 +716,48 @@ function initGeminiConfigModal() {
   const btnDefault = document.getElementById('btnTestGeminiDefault');
   const inputKey = document.getElementById('inputGeminiApiKey');
   const statusMsg = document.getElementById('geminiKeyStatusMsg');
+  const selectModel = document.getElementById('selectGeminiModel');
+  const groupCustom = document.getElementById('groupGeminiCustomModel');
+  const inputCustom = document.getElementById('inputGeminiCustomModel');
 
   if (!btnOpen || !backdrop || !btnClose) return;
 
+  if (selectModel) {
+    selectModel.addEventListener('change', () => {
+      if (selectModel.value === 'custom') {
+        if (groupCustom) groupCustom.style.display = 'block';
+        if (inputCustom) inputCustom.focus();
+      } else {
+        if (groupCustom) groupCustom.style.display = 'none';
+      }
+      sfx.click();
+    });
+  }
+
   btnOpen.addEventListener('click', () => {
     backdrop.style.display = 'flex';
+    if (selectModel) {
+      let matched = false;
+      for (let opt of selectModel.options) {
+        if (opt.value === ACTIVE_GEMINI_MODEL) {
+          selectModel.value = ACTIVE_GEMINI_MODEL;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        selectModel.value = 'custom';
+        if (groupCustom) groupCustom.style.display = 'block';
+        if (inputCustom) inputCustom.value = ACTIVE_GEMINI_MODEL;
+      } else {
+        if (groupCustom) groupCustom.style.display = 'none';
+      }
+    }
+    if (statusMsg) {
+      const modeStr = ACTIVE_GEMINI_LIVE ? 'Live Cloud Inference' : 'Built-in Autonomous Engine';
+      statusMsg.textContent = `Current Active: ${formatModelDisplayName(ACTIVE_GEMINI_MODEL)} (${modeStr})`;
+      statusMsg.style.color = '#94A3B8';
+    }
     sfx.click();
   });
 
@@ -642,41 +766,68 @@ function initGeminiConfigModal() {
     sfx.click();
   });
 
-  btnDefault.addEventListener('click', () => {
-    if (statusMsg) {
-      statusMsg.textContent = '✓ Using Built-In Gemini 2.5 Flash Autonomous Engine.';
-      statusMsg.style.color = '#00E575';
-    }
-    sfx.click();
-  });
-
-  btnSave.addEventListener('click', async () => {
-    const key = inputKey.value.trim();
-    if (!key) {
-      if (statusMsg) {
-        statusMsg.textContent = 'Please enter an API key or use built-in engine.';
-        statusMsg.style.color = '#EF4444';
-      }
-      return;
+  btnDefault.addEventListener('click', async () => {
+    let chosenModel = selectModel ? selectModel.value : ACTIVE_GEMINI_MODEL;
+    if (chosenModel === 'custom') {
+      chosenModel = inputCustom && inputCustom.value.trim() ? inputCustom.value.trim() : ACTIVE_GEMINI_MODEL;
     }
 
     try {
+      await fetch('/api/settings/gemini-model', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: chosenModel })
+      });
+    } catch (e) {
+      // offline fallback
+    }
+
+    updateGeminiUI(chosenModel, false);
+    if (statusMsg) {
+      statusMsg.textContent = `✓ Using Built-In ${formatModelDisplayName(chosenModel)} Autonomous Engine.`;
+      statusMsg.style.color = '#00E575';
+    }
+    sfx.click();
+    setTimeout(() => { backdrop.style.display = 'none'; }, 1000);
+  });
+
+  btnSave.addEventListener('click', async () => {
+    let chosenModel = selectModel ? selectModel.value : ACTIVE_GEMINI_MODEL;
+    if (chosenModel === 'custom') {
+      chosenModel = inputCustom && inputCustom.value.trim() ? inputCustom.value.trim() : ACTIVE_GEMINI_MODEL;
+    }
+    const key = inputKey.value.trim();
+
+    try {
+      const payload = { model: chosenModel };
+      if (key) payload.api_key = key;
+
       const res = await fetch('/api/settings/gemini-key', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ api_key: key })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       if (data.success) {
-        statusMsg.textContent = '✓ Gemini 2.5 Flash Cloud Inference Activated!';
+        updateGeminiUI(data.model || chosenModel, data.live);
+        if (data.live) {
+          statusMsg.textContent = `✓ ${formatModelDisplayName(data.model || chosenModel)} Cloud Inference Activated!`;
+        } else {
+          statusMsg.textContent = `✓ ${formatModelDisplayName(data.model || chosenModel)} Configured (Built-In Engine)!`;
+        }
         statusMsg.style.color = '#00E575';
-        btnOpen.textContent = '✨ GEMINI 2.5 (LIVE CLOUD)';
         sfx.click();
         setTimeout(() => { backdrop.style.display = 'none'; }, 1200);
+      } else {
+        statusMsg.textContent = data.error || 'Configuration error.';
+        statusMsg.style.color = '#EF4444';
       }
     } catch (e) {
-      statusMsg.textContent = 'Error saving key.';
-      statusMsg.style.color = '#EF4444';
+      updateGeminiUI(chosenModel, !!key);
+      statusMsg.textContent = `✓ ${formatModelDisplayName(chosenModel)} active locally.`;
+      statusMsg.style.color = '#00E575';
+      sfx.click();
+      setTimeout(() => { backdrop.style.display = 'none'; }, 1200);
     }
   });
 }
@@ -753,7 +904,7 @@ function initCustomInvoiceModal() {
       const res = await fetch('/api/invoices/custom', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ ...payload, model: ACTIVE_GEMINI_MODEL })
       });
       const data = await res.json();
 
@@ -773,7 +924,7 @@ function initCustomInvoiceModal() {
           `>> Normalizer: Parsed role "${payload.role_title}" at $${rate}/hr across ${hours}h`,
           `>> Contract RAG: Grounded against SOW-IBM-2025-09 rate card caps`,
           `>> SAP ERP: Checked line commitment and remaining balance on ${payload.po_number}`,
-          `>> Gemini 2.5 Flash: ${ACTIVE_GEMINI_ANALYSIS.executive_summary}`
+          `>> ${formatModelDisplayName(ACTIVE_GEMINI_MODEL)}: ${ACTIVE_GEMINI_ANALYSIS.executive_summary}`
         ];
 
         logs.forEach((log, idx) => {
